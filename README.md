@@ -4,6 +4,6 @@ The micro language can be used to implement the whole instruction set of the mac
 
 # Usage
 Current implementation assumes the platform the code is run can run Python 2.7. 
-1. Implement your exercise to main.py (follow the example)
-2. Run "VilleDeploy.py"
-3. File "deployed.py" contains everything needed to run the exercise.
+- Implement your exercise to main.py (follow the example)
+- Run "VilleDeploy.py"
+- File "deployed.py" contains everything needed to run the exercise.
