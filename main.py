@@ -1,9 +1,9 @@
 #encoding: utf-8
 from MachineSim import *
 user_input = """
-100 LATAA 98
-101 LISÄÄ 99
-102 TALLENNA 97
+100 LOAD 98
+101 ADD 99
+102 STORE 97
 """
 p = MachineProgram(user_input)
 sim = MachineSim()

@@ -28,8 +28,12 @@ class MikroSim:
         if microProgram != None:
             self.MPM = [[str(x) for x in y] for y in microProgram.MPM]
             self.printClocks = microProgram.debug
+            self.debug = microProgram.debug
 
         self.resetBus(True, True, True)
+
+        if self.debug:
+            self.printProgram()
 
     def resetBus(self, V1=False, V2=False, V3=False):
         if V1:
@@ -124,7 +128,6 @@ class MikroSim:
         if complement:
             result.complement()
         result += v2
-        print result
         if x2:
             result <<= 1
 
@@ -159,7 +162,6 @@ class MikroSim:
         self.resetBus()
         self.resetMPC()
         self.resetMIR()
-
         while (True):
             if ("".join(self.MIR_INS) == self.zeroInstruction):
                 if self.printClocks:
@@ -214,6 +216,12 @@ class MikroSim:
             s += "<MPC:"+ str(self.MPC)+ ">"
         return s
 
+    def printProgram(self):
+        indexed = [(idx, "  ".join(self.MPM[idx])) for idx in range(0,256)]
+        indexed = [("%s: %s" % ("{0: < 4}".format(pair[0]), pair[1])) for pair in indexed if pair[1].replace(" ", "") != self.zeroInstruction]
+        print("      " + " ".join(["{0:<2}".format(x) for x in range(1,23)]))
+        print("\n".join(indexed))
+
 
 class MicroProgram(object):
     zeroInstruction = [0]*22
@@ -267,35 +275,7 @@ class MicroProgram(object):
 
 
 def debug():
+    global mp
     mp.debug = True
     print "VAROITUS: palautuksesta ei saa pisteitä, jos debug()-kutsu on vastauksessa!"
-
-# User program starts here
-userInput = """
-1 9 10 11 12 13 21 17
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22
-
-"""
-# 1 2 3 45,6 KOMMENTTI KESKELLA17 22 KOMMENTTI
-# debug
-# 1: cc(1,13,17, 22) KOMMENTTI
-# 2: cc(5,6,7,8,21,17,22)
-# cc(1,13,17)
-# cc(5,6,7,8,21,17,22)
-
-mp = MicroProgram(userInput)
-
-cc = mp.setCC
-sim = MikroSim(mp)
-
-for data in [random.randint(-2**10, -1), random.randint(1, 2**10)]:
-    # data = random.randint(-2**10,2**10)
-    sim.resetRegisters()
-    sim.setA(2**16-1)
-
-
-    print "<ignore>Ennen suoritusta:", sim.printRegisters(a=True), "</ignore>"
-    sim.execute()
-    # sim.aluTest()
-    print "Jälkeen:          ", sim.printRegisters(mdr=True)
 
